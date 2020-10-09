@@ -1,10 +1,16 @@
 <?php
 
-$pdo = new PDO('mysql:host=localhost:8889;dbname=api_banque', 'root', 'root');
+require 'app.php';
+$app = new App();
 
-$statement = $pdo->query("SELECT * FROM user");
-$result = $statement->fetchAll();
+if (key_exists("page", $_GET)) {
+    $page = ucfirst($_GET["page"]);
 
-header("Content-Type:application/json");
+    require $page.".php";
+    $class = new $page();
 
-echo json_encode($result);
+    require 'router.php';
+
+} else {
+    $app->sendData("Erreur de choix de table");
+}
